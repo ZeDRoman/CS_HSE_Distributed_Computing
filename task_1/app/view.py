@@ -11,7 +11,7 @@ from app.config import *
 
 @app.route('/product/create', methods=['post'])
 def create_product():
-    product_id = request.args.get('id')
+    product_id = request.form.get('id')
     if not checkIsNumber(product_id, 'product_id'):
         return idNotNumber(), status.HTTP_400_BAD_REQUEST
 
