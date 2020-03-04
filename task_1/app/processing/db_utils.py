@@ -1,8 +1,8 @@
 from sqlalchemy.exc import IntegrityError
 
-from app.__init__ import app, db
-from app.processing.debug_messages import production_form_data, log_db_error
-from app.db_data.Product import Product, productFromForm
+from __init__ import app, db
+from processing.debug_messages import production_form_data, log_db_error
+from db_data.Product import Product, productFromForm
 
 
 def getProductById(product_id):

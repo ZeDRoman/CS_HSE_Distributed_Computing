@@ -1,6 +1,6 @@
-from app.__init__ import app
+from __init__ import app
 
-from app.processing.debug_messages import log_form_validation_error, production_form_data
+from processing.debug_messages import log_form_validation_error, production_form_data
 
 
 def checkIsNumber(elem, elem_type):

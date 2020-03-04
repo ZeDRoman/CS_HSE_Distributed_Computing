@@ -1,12 +1,12 @@
 from flask_api import status
 
-from app import app, db
-from app.forms.ProductForm import ProductForm
-from app.processing.debug_messages import *
-from app.processing.answers import *
-from app.processing.utils import formIsValid, checkIsNumber
-from app.processing.db_utils import getProductById, getProducts, changeProduct, createProductFromForm
-from app.config import *
+from __init__ import app, db
+from forms.ProductForm import ProductForm
+from processing.debug_messages import *
+from processing.answers import *
+from processing.utils import formIsValid, checkIsNumber
+from processing.db_utils import getProductById, getProducts, changeProduct, createProductFromForm
+from config import *
 
 
 @app.route('/product/create', methods=['post'])
