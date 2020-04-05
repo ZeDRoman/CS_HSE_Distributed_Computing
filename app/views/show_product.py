@@ -1,13 +1,12 @@
 from flask_api import status
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 
 from processing.db_utils import getProductById
 from processing.utils import checkIsNumber
-from run import app
 from views.answers import idNotNumber, idDoesntExists, idNotProvided
 
 
-@app.route('/product', methods=['get'])
+@current_app.route('/product', methods=['get'])
 def show_product():
     product_id = request.args.get('id', None)
     if product_id is None:

@@ -1,15 +1,14 @@
 from flask_api import status
 from flask_expects_json import expects_json
-from flask import request
+from flask import request, current_app
 
 from processing.db_utils import getProductById, changeProduct
 from processing.utils import checkIsNumber
-from run import app
 from views.answers import idNotNumber, idDoesntExists, success
 from views.schemas import edit_product_schema
 
 
-@app.route('/product', methods=['post'])
+@current_app.route('/product', methods=['post'])
 @expects_json(edit_product_schema)
 def edit_product():
     product_id = request.json['id']

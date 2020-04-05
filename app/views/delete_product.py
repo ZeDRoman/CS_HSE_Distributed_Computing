@@ -1,15 +1,14 @@
 from flask_api import status
 from flask_expects_json import expects_json
-from flask import request
+from flask import request, current_app
 
 from processing.db_utils import getProductById, deleteProduct
-from run import app
 from processing.utils import checkIsNumber
 from views.answers import success, idNotNumber, idDoesntExists
 from views.schemas import delete_product_schema
 
 
-@app.route('/product', methods=['delete'])
+@current_app.route('/product', methods=['delete'])
 @expects_json(delete_product_schema)
 def delete_product():
     product_id = request.json['id']

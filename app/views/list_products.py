@@ -1,15 +1,14 @@
 from flask_api import status
-from flask import request, jsonify
+from flask import request, jsonify, current_app
 
 from db_data.Product import Product
 from processing.db_utils import getPageAmount, getProducts
 from processing.utils import checkIsNumber
-from run import app
 from config import STANDART_PAGE_COUNT
 from views.answers import pageNotNumber, pageCountNotNumber
 
 
-@app.route('/products', methods=['get'])
+@current_app.route('/products', methods=['get'])
 def list_products():
     page = request.args.get('page', 1)
     if checkIsNumber(page, 'page'):

@@ -1,4 +1,6 @@
-from run import db
+from flask import g
+
+db = g.db
 
 
 def productFromJson(data):

@@ -1,5 +1,9 @@
-from run import db
+from flask import g
+
+# from run import db
 from db_data.Product import Product
+
+db = g.db
 
 
 def getProductById(product_id):
