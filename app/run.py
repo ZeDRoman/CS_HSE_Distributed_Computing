@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-from view import *
+from views.__init__ import *
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
