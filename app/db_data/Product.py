@@ -1,12 +1,18 @@
-from  __init__ import db
+from run import db
 
 
-def productFromForm(form):
+def productFromJson(data):
+    id = db.session.query(db.func.max(Product.id)).scalar()
+    if id is None:
+        id = 1
+    else:
+        id += 1
     return Product(
-               id=form.id.data,
-               name=form.name.data,
-               category=form.category.data
+               id=id,
+               name=data['name'],
+               category=data['category']
            )
+
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -15,4 +21,4 @@ class Product(db.Model):
     category = db.Column(db.String(255))
 
     def __repr__(self):
-        return F"id: {self.id}, name: {self.name}, category: {self.category}"
+        return dict(id=self.id, name=self.name, category=self.category)

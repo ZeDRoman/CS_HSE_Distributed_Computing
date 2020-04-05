@@ -1,8 +1,5 @@
-from sqlalchemy.exc import IntegrityError
-
-from __init__ import app, db
-from processing.debug_messages import production_form_data, log_db_error
-from db_data.Product import Product, productFromForm
+from run import db
+from db_data.Product import Product
 
 
 def getProductById(product_id):
@@ -13,11 +10,16 @@ def getProductById(product_id):
         return None
 
 
+def deleteProduct(product):
+    db.session.delete(product)
+    db.session.commit()
+
+
 def getProducts(page, page_count):
-    first = (page - 1) * page_count
-    last = page * page_count
+    first = (page) * page_count
+    last = (page + 1) * page_count
     objs = db.session.query(Product).slice(first, last)
-    return "\n".join(map(Product.__repr__, objs))
+    return list(map(Product.__repr__, objs))
 
 
 def changeProduct(product, new_name, new_category):
@@ -26,14 +28,12 @@ def changeProduct(product, new_name, new_category):
     db.session.commit()
 
 
-def createProductFromForm(form):
-    product = productFromForm(form)
-
-    try:
-        db.session.add(product)
-        db.session.commit()
-    except IntegrityError as ex:
-        db.session.rollback()
-        app.logger.info(log_db_error(production_form_data(), ex.orig.args))
-        return False
+def createProduct(product):
+    db.session.add(product)
+    db.session.commit()
     return True
+
+
+def getPageAmount(pageSize, column):
+    amount = db.session.query(db.func.count(column)).scalar()
+    return (amount + pageSize - 1) // pageSize
