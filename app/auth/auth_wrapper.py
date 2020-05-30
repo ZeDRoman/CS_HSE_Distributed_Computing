@@ -11,4 +11,6 @@ def check_auth(func):
             return func()
         else:
             return unauthorised(), status.HTTP_401_UNAUTHORIZED
+
+    wrapper.__name__ = func.__name__
     return wrapper
