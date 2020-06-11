@@ -21,10 +21,19 @@ services:
             SQLALCHEMY_DATABASE_URI: "mysql://admin:12345@db/shop"
             FLASK_APP: run.py
             CONTOUR: production
+            MSG_QUEUE: msg_queue
         ports:
             - 5001:5001
         depends_on:
             - db
+
+    notifications:
+        build: notifications/
+        environment:
+            FLASK_APP: run.py
+            CONTOUR: production
+            MSG_QUEUE: msg_queue
+            SMTP_URL: fakesmtp
 
     app:
         build: app/
@@ -40,3 +49,15 @@ services:
         depends_on:
             - db
             - auth
+
+    msg_queue:
+        image: rabbitmq:3-management
+
+
+    fakesmtp:
+        image: digiplant/fake-smtp
+        ports:
+            - "1025:25"
+
+        volumes:
+            - ./email:/var/mail

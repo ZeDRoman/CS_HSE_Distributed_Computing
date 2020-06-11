@@ -2,19 +2,28 @@ from flask import jsonify
 
 
 def success():
-    return jsonify(error="Success")
+    return jsonify(result="Success")
 
 
 def invalidLogining():
-    return jsonify(error="Invalid username or password")
+    return jsonify(result="error", error="Invalid username or password")
 
 
 def tokenIsRotten():
-    return jsonify(error="You'r refresh token is rotten")
+    return jsonify(result="error", error="You'r refresh token is rotten")
 
 
 def emailTaken():
-    return jsonify(error="Email is already taken")
+    return jsonify(result="error", error="Email is already taken")
+
 
 def refreshTokenNotProvided():
-    return jsonify(error="Refresh token not provided")
+    return jsonify(result="error", error="Refresh token not provided")
+
+
+def userEmailIsNotConfirmed():
+    return jsonify(result="error", error="Email is not comfired")
+
+
+def invalidConfirmToken():
+    return jsonify(result="error", error="Invalid confirmation url")
