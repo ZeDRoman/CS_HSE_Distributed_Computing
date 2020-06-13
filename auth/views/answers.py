@@ -27,3 +27,15 @@ def userEmailIsNotConfirmed():
 
 def invalidConfirmToken():
     return jsonify(result="error", error="Invalid confirmation url")
+
+
+def noSuchUser():
+    return jsonify(result="Error", error="Email doesn't exists")
+
+
+def accesEmailNotProvided():
+    return jsonify(result="Error", error="Access token or Email not provided")
+
+
+def notAdmin():
+    return jsonify(result="Error", error="Need admin privileges")

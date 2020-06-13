@@ -47,3 +47,7 @@ def fileNotProvided():
 
 def fileIsNotAllowed():
     return jsonify(result="Error", error="File is not allowed")
+
+
+def notAdmin():
+    return jsonify(result="Error", error="Need admin privileges")

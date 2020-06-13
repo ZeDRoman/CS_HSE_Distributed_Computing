@@ -1,6 +1,4 @@
 from run import db
-import time
-
-time.sleep(5)
+from db_data.User import User
 
 db.create_all()
