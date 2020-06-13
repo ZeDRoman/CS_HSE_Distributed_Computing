@@ -36,5 +36,14 @@ def productDeleted():
 def success():
     return jsonify(result="Success")
 
+
 def unauthorised():
     return jsonify(result="Error", error="Unauthorised")
+
+
+def fileNotProvided():
+    return jsonify(result="Error", error="File is not provided")
+
+
+def fileIsNotAllowed():
+    return jsonify(result="Error", error="File is not allowed")

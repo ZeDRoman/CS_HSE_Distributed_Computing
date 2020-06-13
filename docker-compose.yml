@@ -27,6 +27,21 @@ services:
         depends_on:
             - db
 
+    csv_loader:
+        build: csv_loader/
+        volumes:
+            - ./csv:/csv
+        environment:
+            SQLALCHEMY_DATABASE_URI: "mysql://admin:12345@db/shop"
+            FLASK_APP: run.py
+            CONTOUR: production
+            MSG_QUEUE: msg_queue
+        depends_on:
+            - msg_queue
+            - app
+        links:
+            - msg_queue
+
     notifications:
         build: notifications/
         environment:
@@ -34,6 +49,10 @@ services:
             CONTOUR: production
             MSG_QUEUE: msg_queue
             SMTP_URL: fakesmtp
+        depends_on:
+          - msg_queue
+        links:
+          - msg_queue
 
     app:
         build: app/
@@ -42,6 +61,9 @@ services:
             AUTH_URI: auth
             FLASK_APP: run.py
             CONTOUR: production
+            MSG_QUEUE: msg_queue
+        volumes:
+            - ./csv:/csv
         links:
             - auth
         ports:
@@ -61,3 +83,4 @@ services:
 
         volumes:
             - ./email:/var/mail
+
