@@ -19,7 +19,7 @@ def secure_filename():
     return str(int(time.time())) + ".csv"
 
 
-@current_app.route('/upload_csv', methods=['GET', 'POST'])
+@current_app.route('/csv', methods=['GET', 'POST'])
 def load_csv():
     if request.method == 'POST':
         file = request.files['file']

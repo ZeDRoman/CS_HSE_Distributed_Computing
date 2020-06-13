@@ -59,6 +59,10 @@ class User(db.Model, UserMixin):
         self.role = "admin"
         db.session.commit()
 
+    def set_user(self):
+        self.role = "user"
+        self.log_in()
+
 def confirm_user(email, password):
     user = db.session.query(User).filter(User.email == email).first()
     if user is None or not user.check_password(password):
