@@ -35,3 +35,6 @@ def productDeleted():
 
 def success():
     return jsonify(error="Success")
+
+def unauthorised():
+    return jsonify(error="Unauthorised")

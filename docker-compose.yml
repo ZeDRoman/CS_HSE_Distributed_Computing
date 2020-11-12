@@ -15,14 +15,28 @@ services:
         ports:
             - 3306:3306
 
+    auth:
+        build: auth/
+        environment:
+            SQLALCHEMY_DATABASE_URI: "mysql://admin:12345@db/shop"
+            FLASK_APP: run.py
+            CONTOUR: production
+        ports:
+            - 5001:5001
+        depends_on:
+            - db
+
     app:
         build: app/
         environment:
             SQLALCHEMY_DATABASE_URI: "mysql://admin:12345@db/shop"
+            AUTH_URI: auth
             FLASK_APP: run.py
+            CONTOUR: production
+        links:
+            - auth
         ports:
             - 5000:5000
         depends_on:
             - db
-        links:
-            - db
+            - auth
