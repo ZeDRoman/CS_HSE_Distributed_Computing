@@ -4,9 +4,10 @@ from flask import request, jsonify, current_app
 from processing.db_utils import getProductById
 from processing.utils import checkIsNumber
 from views.answers import idNotNumber, idDoesntExists, idNotProvided
-
+from auth.auth_wrapper import check_auth
 
 @current_app.route('/product', methods=['get'])
+@check_auth
 def show_product():
     product_id = request.args.get('id', None)
     if product_id is None:

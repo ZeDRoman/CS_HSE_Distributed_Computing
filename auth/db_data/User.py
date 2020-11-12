@@ -8,21 +8,17 @@ db = g.db
 
 
 def createUserFromJson(json):
-    id = db.session.query(db.func.max(User.id)).scalar()
-    if id is None:
-        id = 1
-    else:
-        id += 1
     user = getUser(email=json['email'])
     if user is not None:
         if user.confirmed == 0:
             return True
         return False
 
-    user = User(id=id,
+    user = User(
                 email=json['email'],
                 hashed_password=generate_password_hash(json['password']),
-                confirmed=0
+                confirmed=0,
+                role="user"
                 )
     db.session.add(user)
     db.session.commit()
@@ -38,6 +34,7 @@ class User(db.Model, UserMixin):
     access_token_expire = db.Column(db.DateTime)
     refresh_token = db.Column(db.String(255))
     refresh_token_expire = db.Column(db.DateTime)
+    role = db.Column(db.String(120))
     confirmed = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
@@ -58,6 +55,13 @@ class User(db.Model, UserMixin):
         db.session.commit()
         return self.access_token, self.refresh_token
 
+    def set_admin(self):
+        self.role = "admin"
+        db.session.commit()
+
+    def set_user(self):
+        self.role = "user"
+        self.log_in()
 
 def confirm_user(email, password):
     user = db.session.query(User).filter(User.email == email).first()
@@ -69,6 +73,20 @@ def confirm_user(email, password):
 
 def isAuthenticated(access_token):
     user = db.session.query(User).filter(User.access_token == access_token, db.func.now() < User.access_token_expire).first()
+    if user is not None:
+        return True
+    return False
+
+def isAuthenticatedAdmin(access_token):
+    user = db.session.query(User).filter(User.access_token == access_token, db.func.now() < User.access_token_expire,
+                                         User.role == "admin").first()
+    if user is not None:
+        return True
+    return False
+
+def isAuthenticatedUser(access_token):
+    user = db.session.query(User).filter(User.access_token == access_token, db.func.now() < User.access_token_expire,
+                                         User.role == "user").first()
     if user is not None:
         return True
     return False
@@ -91,3 +109,15 @@ def logoutUser(refresh_token):
 
 def getUser(**kwargs):
     return User.query.filter_by(**kwargs).first()
+
+
+def initAdmin():
+    if not getUser(email="admin"):
+        Admin = User(
+            email="admin",
+            hashed_password=generate_password_hash("admin"),
+            confirmed=1,
+            role="admin"
+        )
+        db.session.add(Admin)
+        db.session.commit()

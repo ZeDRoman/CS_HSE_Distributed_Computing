@@ -1,7 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-CONTOUR = os.environ.get('contour', 'testing')
+CONTOUR = os.environ.get('CONTOUR', 'testing')
 if CONTOUR == 'testing':
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/test.db'
 else:

@@ -4,13 +4,7 @@ db = g.db
 
 
 def productFromJson(data):
-    id = db.session.query(db.func.max(Product.id)).scalar()
-    if id is None:
-        id = 1
-    else:
-        id += 1
     return Product(
-               id=id,
                name=data['name'],
                category=data['category']
            )
