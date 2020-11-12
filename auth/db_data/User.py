@@ -15,11 +15,14 @@ def createUserFromJson(json):
         id += 1
     user = getUser(email=json['email'])
     if user is not None:
+        if user.confirmed == 0:
+            return True
         return False
 
     user = User(id=id,
                 email=json['email'],
-                hashed_password=generate_password_hash(json['password'])
+                hashed_password=generate_password_hash(json['password']),
+                confirmed=0
                 )
     db.session.add(user)
     db.session.commit()
@@ -35,12 +38,17 @@ class User(db.Model, UserMixin):
     access_token_expire = db.Column(db.DateTime)
     refresh_token = db.Column(db.String(255))
     refresh_token_expire = db.Column(db.DateTime)
+    confirmed = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return F"email: {self.email}"
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def confirm(self):
+        self.confirmed = 1
+        db.session.commit()
 
     def log_in(self):
         self.access_token = createToken()
@@ -49,6 +57,14 @@ class User(db.Model, UserMixin):
         self.refresh_token_expire = datetime.utcnow() + timedelta(hours=1)
         db.session.commit()
         return self.access_token, self.refresh_token
+
+
+def confirm_user(email, password):
+    user = db.session.query(User).filter(User.email == email).first()
+    if user is None or not user.check_password(password):
+        return False
+    user.confirm()
+    return True
 
 
 def isAuthenticated(access_token):
