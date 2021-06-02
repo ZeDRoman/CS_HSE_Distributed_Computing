@@ -5,7 +5,7 @@ Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.3
 flask-login==0.5.0
 Flask-script
-urllib3==1.25.8
+urllib3==1.26.5
 requests==2.23.0
 mysqlclient
 flask_expects_json==1.4.0
